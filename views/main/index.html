@@ -5,20 +5,16 @@
 </style>
 {{/block}}
 
-{{block "wrapper"}}
+{{block "main"}}
 <div class="layui-container">
     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-        <legend>OKMS</legend>
+        <legend>{{ title }}</legend>
     </fieldset>
     <div style="padding: 20px; background-color: #F2F2F2;">
         <div class="layui-row layui-col-space15">
-            <div class="layui-col-md6">
+            <div class="layui-col-md12">
                 <div class="layui-card">
-                    <div class="layui-card-header"><strong>Introduction</strong></div>
-                    <div class="layui-card-body">
-                        <p>This project is built by NodeJS, Express, MongoDB and Layui.</p>
-                        <div id="ratea" class="rates"></div>
-                    </div>
+                    
                 </div>
             </div>
             <div class="layui-col-md6">
@@ -51,10 +47,11 @@
 
 {{block "script"}}
 <script>
-    layui.use(['layer', 'rate'], function () {
+    layui.use(['layer', 'form', 'rate'], function () {
         var layer = layui.layer,
+            form = layui.form,
             rate = layui.rate,
-            $ = layui.$;
+            $ = layui.jquery;        
 
         var rates = [{
                 id: 1,

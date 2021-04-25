@@ -1,0 +1,75 @@
+/* layout css */
+html,
+body {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    position: relative;
+}
+
+.wrapper {
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+}
+
+.header {
+    .topbar {
+        height: 41px;
+        z-index: 1000;
+        border-bottom: 1px solid #404553;
+        background-color: #393D49;
+
+        .logo {
+            a {
+                display: block;
+                width: 120px;
+                height: 100%;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+        }
+
+        .location {
+            line-height: 40px;
+            color: #fff;
+
+            strong {
+                color: #FF5722;
+            }
+        }
+
+        .serach {
+            .layui-form {
+                padding-top: 2px;
+                text-align: right;
+            }
+        }
+    }
+}
+
+.footer {
+    position: absolute;
+    padding: 12px 0;
+    border-top: 1px solid #eee;
+    width: 100%;
+    bottom: 0;
+
+    .text {
+
+        text-align: center;
+        font-size: 12px;
+
+        span {
+            margin-right: 10px;
+        }
+    }
+}
