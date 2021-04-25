@@ -9,9 +9,12 @@ exports.homePage = (req, res) => {
         type: '单间',
         room: '次卧(3室)',
         area: '23㎡',
-        business: '行政商务中心',
-        district: '曲江千林郡',
-        route: '距4号线金滹沱地铁站步行1431m',
+        distance: '1.8',
+        addres: {
+            business: '行政商务中心',
+            district: '曲江千林郡',
+            route: '距4号线金滹沱地铁站步行1431m'
+        },
         source: {
             type: '来自经纪人',
             info: '陕西宜人宜家房地产信息咨询有限公司',

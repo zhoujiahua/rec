@@ -9,7 +9,10 @@
 <div class="home">
     <div class="layui-container">
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-            <legend>当前城市房源信息列表</legend>
+            <legend>
+                <strong class="local-text" id="localCity"></strong>
+                <span>租房信息</span>
+            </legend>
         </fieldset>
         <div class="layui-row layui-col-space15">
             {{each house item }}
@@ -20,14 +23,52 @@
                             <img src="{{ item.imgr }}">
                         </div>
                         <div class="text">
-                            <a href="{{ item.link }}" title="{{ item.title }}">
+                            <a href="{{ item.link }}" title="{{ item.title }}" class="layui-elip">
+                                <strong>{{ item.type }}</strong>
+                                <span>|</span>
                                 <span>{{ item.title }}</span>
                             </a>
                             <dl>
-                                <dd><strong>类型：</strong><span>{{ item.type }}</span></dd>
-                                <dd><strong>房型：</strong><span>{{ item.room }}</span></dd>
-                                <dd><strong>大小：</strong><span>{{ item.area }}</span></dd>
+                                <dd>
+                                    <strong>商区：</strong>
+                                    <span>{{ item.addres.business }}</span>
+                                </dd>
+                                <dd>
+                                    <strong>房型：</strong>
+                                    <span>{{ item.room }}</span>
+                                    <span>-</span>
+                                    <span>{{ item.area }}</span>
+                                </dd>
+                                <dd class="money">
+                                    <strong>价格：</strong>
+                                    <span>{{ item.money.price }}</span>
+                                    <span>/</span>
+                                    <span>{{ item.money.units }}</span>
+                                </dd>
+                                <dd>
+                                    <strong>来源：</strong>
+                                    <span>{{ item.source.type }}</span>
+                                    <span>-</span>
+                                    <span>{{ item.source.intro }}</span>
+                                </dd>
+                                <dd>
+                                    <strong>距离：</strong>
+                                    <span>{{ item.distance }}</span>
+                                    <span>/km</span>
+                                </dd>
+                                <dd>
+                                    <strong>地址：</strong>
+                                    <span>{{ item.addres.district }}</span>
+                                    <span>-</span>
+                                    <span>{{ item.addres.route }}</span>
+                                </dd>
                             </dl>
+                            <div class="opt">
+                                <button type="button" class="layui-btn layui-btn-xs layui-btn-danger"
+                                    id="busBtn">公交路线</button>
+                                <button type="button" class="layui-btn layui-btn-xs layui-btn-normal"
+                                    id="carBtn">驾车路线</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -40,11 +81,24 @@
 
 {{block "script"}}
 <script>
-    layui.use(['layer', 'form', 'rate'], function () {
+    layui.use(['layer'], function () {
         var layer = layui.layer,
-            form = layui.form,
-            rate = layui.rate,
             $ = layui.jquery;
+
+        var cityInfo = localStorage.cityInfo;
+        if (cityInfo) {
+            cityInfo = JSON.parse(cityInfo);
+            $("#localCity").text(cityInfo.city);
+        }
+
+        $('#busBtn').on('click', function () {
+            layer.msg('公交路线');
+        })
+
+        $('#carBtn').on('click', function () {
+            layer.msg('驾车路线');
+        })
+
     })
 </script>
 {{/block}}

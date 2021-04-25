@@ -1,4 +1,9 @@
 .home {
+    .local-text {
+        color: #FF5722;
+        font-weight: 600;
+    }
+
     .house {
         .house-item {
             padding: 8px 6px;
@@ -21,21 +26,34 @@
                 font-size: 12px;
 
                 a {
+                    display: block;
                     font-weight: 600;
+
+                    strong {
+                        color: #FF5722
+                    }
+
                     &:hover {
                         text-decoration: underline;
                         color: #FF5722
                     }
                 }
 
-                // dl {
-                //     dd {
-                //         &:nth-child(0) {
+                dl {
+                    margin-bottom: 6px;
 
-                //         }
-                //     }
+                    .money {
+                        span {
+                            color: #FF5722
+                        }
+                    }
+                }
+
+                // .opt {
+
                 // }
             }
+
 
         }
     }
