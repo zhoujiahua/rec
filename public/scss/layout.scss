@@ -56,18 +56,21 @@ body {
     }
 }
 
+.main {
+    padding-bottom: 46px;
+}
+
 .footer {
     position: absolute;
-    padding: 12px 0;
+    background-color: #fff;
     border-top: 1px solid #eee;
+    padding: 10px 0;
     width: 100%;
     bottom: 0;
 
     .text {
-
         text-align: center;
         font-size: 12px;
-
         span {
             margin-right: 10px;
         }

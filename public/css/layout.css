@@ -17,7 +17,9 @@ body { position: relative; }
 
 .header .topbar .serach .layui-form { padding-top: 2px; text-align: right; }
 
-.footer { position: absolute; padding: 12px 0; border-top: 1px solid #eee; width: 100%; bottom: 0; }
+.main { padding-bottom: 46px; }
+
+.footer { position: absolute; background-color: #fff; border-top: 1px solid #eee; padding: 10px 0; width: 100%; bottom: 0; }
 
 .footer .text { text-align: center; font-size: 12px; }
 

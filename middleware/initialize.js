@@ -29,11 +29,12 @@ module.exports = (app) => {
     passportJWT(passport, $re('models/UserModel.js'));
 
     //Used art template
+    app.set('view cache', false);
+    app.set('views', './views');
+    app.set('view engine', 'html');
     app.engine('html', require('express-art-template'));
     app.set('view options', {
         debug: process.env.NODE_ENV !== 'production'
     });
-    app.set('view cache', false);
-    app.set('views', './views');
-    app.set('view engine', 'html');
+    
 }
