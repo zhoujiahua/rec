@@ -36,5 +36,4 @@ module.exports = (app) => {
     app.set('view options', {
         debug: process.env.NODE_ENV !== 'production'
     });
-    
 }
