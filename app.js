@@ -1,3 +1,4 @@
+const { ...args } = require('./utils/ETCTools');
 const appRoot = require('app-root-path');
 const express = require('express');
 const path = require('path');
@@ -6,9 +7,11 @@ const app = express();
 // Used app root path
 global.$at = appRoot;
 global.$re = appRoot.require;
+global.$etc = args;
 
-// Set public folder
-app.use(express.static(path.join(__dirname, 'public')));
+
+    // Set public folder
+    app.use(express.static(path.join(__dirname, 'public')));
 app.use('/upload', express.static(path.join(__dirname, 'upload')));
 
 // Used body parser
