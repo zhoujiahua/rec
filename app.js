@@ -9,9 +9,8 @@ global.$at = appRoot;
 global.$re = appRoot.require;
 global.$etc = args;
 
-
-    // Set public folder
-    app.use(express.static(path.join(__dirname, 'public')));
+// Set public folder
+app.use(express.static(path.join(__dirname, 'public')));
 app.use('/upload', express.static(path.join(__dirname, 'upload')));
 
 // Used body parser
@@ -33,5 +32,6 @@ require('./routers/base')(app);
 const port = process.env.PORT || 5000;
 app.listen(port, async () => {
     await require('./utils/DBConnect')();
+    // require('./utils/TFloor')();
     console.log('Start server on:http://localhost:' + port);
 })

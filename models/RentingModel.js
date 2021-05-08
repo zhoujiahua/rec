@@ -23,4 +23,23 @@ const RenList = new Schema({
     }
 })
 
+const RenInfo = new Schema({
+    city: String,
+    province: String,
+    adcode: String,
+    distance: String,
+    sort: String,
+    key: String,
+    cid: String,
+    plate: String,
+    protocol: String,
+    link: String,
+    curl: String,
+    date: {
+        type: Date,
+        default: Date.now().toString()
+    }
+})
+
 exports.RenList = mongoose.model('renlist', RenList, 'renlist');
+exports.RenInfo = mongoose.model('reninfo', RenInfo, 'reninfo');

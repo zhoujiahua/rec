@@ -8,7 +8,7 @@ module.exports = async () => {
             useFindAndModify: false,
             useCreateIndex: true
         });
-        console.log('Database connection successful...');
+        console.log('Database connection successful.'.yellow);
     } catch (error) {
         throw error;
     }
