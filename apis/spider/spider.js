@@ -2,13 +2,15 @@ const { RenInfo, RenList } = $re('/models/RentingModel.js');
 
 exports.spiderList = async (req, res) => {
     try {
-        const findKey = { city: '西安' };
-        const sortKey = { cdate: 'desc' };
-        const page = 1;
-        const limit = 10;
-        const count = await RenList.find(findKey).count();
-        const data = await RenList.find(findKey).skip(limit * (Number(page) ? page - 1 : 0)).limit(Number(limit)).sort(sortKey);
-
+        const r = req.query;
+        console.log(r);
+        r.page = r.page || 1;
+        r.limit = r.limit || 10;
+        r.wk = Object.assign({ city: '西安' }, r.wk);
+        r.sort = Object.assign({ cdate: 'desc' }, r.sort);
+        r.wk.city = r.wk.city.replace('市', '');
+        const count = await RenList.find(r.wk).count();
+        const data = await RenList.find(r.wk).skip(r.limit * (Number(r.page) ? r.page - 1 : 0)).limit(Number(r.limit)).sort(r.sort);
         return $etc.msgHandler(res, 200, { count, data });
     } catch (error) {
         $etc.errorHandler(req, error);

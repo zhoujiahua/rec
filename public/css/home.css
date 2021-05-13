@@ -8,13 +8,15 @@
 
 .home .house .house-item .text { width: 66%; font-size: 12px; }
 
-.home .house .house-item .text a { display: block; font-weight: 600; }
+.home .house .house-item .text a { display: block; font-weight: 600; font-size: 14px; }
 
 .home .house .house-item .text a strong { color: #FF5722; }
 
 .home .house .house-item .text a:hover { text-decoration: underline; color: #FF5722; }
 
-.home .house .house-item .text dl { margin-bottom: 6px; }
+.home .house .house-item .text dl { margin: 6px 0; height: 108px; overflow: hidden; }
+
+.home .house .house-item .text dl dd { line-height: 22px; }
 
 .home .house .house-item .text dl .money span { color: #FF5722; }
 /*# sourceMappingURL=home.css.map */

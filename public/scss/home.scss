@@ -28,6 +28,7 @@
                 a {
                     display: block;
                     font-weight: 600;
+                    font-size: 14px;
 
                     strong {
                         color: #FF5722
@@ -40,7 +41,13 @@
                 }
 
                 dl {
-                    margin-bottom: 6px;
+                    margin: 6px 0;
+                    height:108px;
+                    overflow: hidden;
+
+                    dd {
+                        line-height: 22px;
+                    }
 
                     .money {
                         span {
@@ -53,8 +60,6 @@
 
                 // }
             }
-
-
         }
     }
 }

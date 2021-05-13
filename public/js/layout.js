@@ -23,14 +23,13 @@ layui.use(['layer', 'form'], function () {
         citysearch.getLocalCity(function (status, result) {
             if (status === 'complete' && result.info === 'OK') {
                 if (result && result.city && result.bounds) {
-                    var province = result.province,
-                        city = result.city;
+                    var city = result.city;
                     localStorage.setItem('cityInfo', JSON.stringify(result));
-                    $('#localTxt').text(province + city);
+                    $('#localTxt').text(city);
                 }
             } else {
                 localStorage.removeItem('cityInfo');
-                $('#localTxt').text("陕西省西安市");
+                $('#localTxt').text("西安市");
             }
         });
     }
