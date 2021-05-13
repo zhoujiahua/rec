@@ -19,6 +19,6 @@ else
     yarn
 fi
 
-pm2 restart hook
+pm2 restart chuzu
 
 echo "---------End deploy----------------------------"
