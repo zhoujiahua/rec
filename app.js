@@ -32,6 +32,6 @@ require('./routers/base')(app);
 const port = process.env.PORT || 9000;
 app.listen(port, async () => {
     await require('./utils/DBConnect')();
-    require('./utils/TFloor')();
+    // require('./utils/TFloor')();
     console.log('Start server on:http://localhost:' + port);
 })

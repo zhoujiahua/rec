@@ -90,11 +90,10 @@
             cityInfo = JSON.parse(cityInfo);
             $("#localCity").text(cityInfo.city);
             loadList({
-                wk: {
-                    city: cityInfo.city
-                },
+                wk: cityInfo.city,
                 page: 1,
-                limit: 20
+                limit: 20,
+                sort: 'desc'
             })
         }
 
@@ -105,61 +104,46 @@
                 data: params,
                 dataType: "json",
                 success: function (res) {
-                    if (res.success) {
-                        var d = res.data;
-                        var html = '';
-                        $.each(d, function (key, item) {
-                            html += `<div class="layui-col-md6"><div class="house"><div class="layui-panel house-item"><div class="pic"><img src="${item.imgr}"></div>
-                                    <div class="text"><a href="${item.link}" title="${item.title}" class="layui-elip"><strong>${ item.type }</strong><span>|</span><span>${ item.title }</span></a>
-                                <dl>
-                                <dd>
-                                    <strong>房型：</strong>
-                                    <span>${ item.room }</span>
-                                </dd>
-                                <dd class="money">
-                                    <strong>价格：</strong>
-                                    <span>${ item.money.price }</span>
-                                    <span>/</span>
-                                    <span>${ item.money.units }</span>
-                                </dd>
-                                <dd>
-                                    <strong>来源：</strong>
-                                    <span>${ item.source.type }</span>
-                                    <span>-</span>
-                                    <span>${ item.source.info }</span>
-                                    <span>-</span>
-                                    <span>${ item.source.intro }</span>
-                                </dd>
-                                <dd>
-                                    <strong>地址：</strong>
-                                    <span>${ item.infor.site }</span>
-                                    <span>-</span>
-                                    <span>${ item.infor.housing }</span>
-                                    <span>-</span>
-                                    <span>${ item.infor.traffic }</span>
-                                </dd>
-                            </dl>
-                            <div class="opt">
-                                <button type="button" class="layui-btn layui-btn-xs layui-btn-danger"
-                                    id="busBtn">公交路线</button>
-                                <button type="button" class="layui-btn layui-btn-xs layui-btn-normal"
-                                    id="carBtn">驾车路线</button>
-                            </div></div></div></div></div>`;
-                        });
-                        $("#houseList").html(html);
-                    }
+                    if (res.success) setListHtml(res.data);
                 }
             });
         }
 
-        $('#busBtn').on('click', function () {
-            layer.msg('公交路线');
-        })
+        function setListHtml(data) {
+            var html = '';
+            $.each(data, function (key, item) {
+                html += `<div class="layui-col-md6"><div class="house"><div class="layui-panel house-item"><div class="pic"><img src="${item.imgr}"></div>
+                                    <div class="text"><a href="${item.link}" title="${item.title}" class="layui-elip"><strong>${ item.type }</strong><span>|</span><span>${ item.title }</span></a>
+                                <dl>
+                                <dd><strong>房型：</strong><span>${ item.room }</span></dd>
+                                <dd class="money">
+                                    <strong>价格：</strong><span>${ item.money.price }</span><span>/</span><span>${ item.money.units }</span>
+                                </dd>
+                                <dd>
+                                    <strong>来源：</strong><span>${ item.source.type }</span><span>-</span>
+                                    <span>${ item.source.info }</span><span>-</span><span>${ item.source.intro }</span>
+                                </dd>
+                                <dd>
+                                    <strong>地址：</strong><span>${ item.infor.site }</span><span>-</span>
+                                    <span>${ item.infor.housing }</span><span>-</span><span>${ item.infor.traffic }</span>
+                                </dd>
+                            </dl>
+                            <div class="opt">
+                                <button type="button" class="layui-btn layui-btn-xs layui-btn-danger" id="busBtn">公交路线</button>
+                                <button type="button" class="layui-btn layui-btn-xs layui-btn-normal" id="carBtn">驾车路线</button>
+                            </div></div></div></div></div>`;
+            });
 
-        $('#carBtn').on('click', function () {
-            layer.msg('驾车路线');
-        })
+            $("#houseList").html(html);
 
+            $('#busBtn').on('click', function () {
+                layer.msg('公交路线');
+            })
+
+            $('#carBtn').on('click', function () {
+                layer.msg('驾车路线');
+            })
+        }
     })
 </script>
 {{/block}}
