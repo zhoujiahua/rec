@@ -115,8 +115,11 @@
             $.each(data, function (key, item) {
                 html += `<div class="layui-col-md6"><div class="house"><div class="layui-panel house-item">
                          <div class="pic"><img layer-src="${item.imgr}" src="${item.imgr}"></div>
-                         <div class="text"><a href="${item.link}" title="${item.title}" target="_blank" class="layui-elip"><strong>${ item.type }</strong><span>|</span><span>${ item.title }</span></a>
-                                <dl>
+                         <div class="text">
+                            <a href="${item.link}" title="${item.title}" target="_blank" class="layui-elip">
+                                <strong>${ item.type }</strong><span>|</span><span>${ item.title }</span>
+                            </a>
+                            <dl>
                                 <dd><strong>房型：</strong><span>${ item.room }</span></dd>
                                 <dd class="money">
                                     <strong>价格：</strong><span>${ item.money.price }</span><span>/</span><span>${ item.money.units }</span>
@@ -149,6 +152,16 @@
                 photos: '.pic',
                 anim: 4
             });
+
+            $('.text a').on('click', function (e) {
+                e.preventDefault();
+                layer.open({
+                    title: $(this).attr('title'),
+                    area: ['80%', '90%'],
+                    type: 2,
+                    content: $(this).attr('href')
+                });
+            })
 
             $('.bus').on('click', function () {
                 layer.msg('公交路线');
