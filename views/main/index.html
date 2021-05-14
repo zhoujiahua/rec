@@ -81,8 +81,9 @@
 
 {{block "script"}}
 <script>
-    layui.use(['layer'], function () {
+    layui.use(['layer', 'flow'], function () {
         var layer = layui.layer,
+            flow = layui.flow,
             $ = layui.jquery;
 
         var cityInfo = localStorage.cityInfo;
@@ -112,8 +113,9 @@
         function setListHtml(data) {
             var html = '';
             $.each(data, function (key, item) {
-                html += `<div class="layui-col-md6"><div class="house"><div class="layui-panel house-item"><div class="pic"><img src="${item.imgr}"></div>
-                                    <div class="text"><a href="${item.link}" title="${item.title}" class="layui-elip"><strong>${ item.type }</strong><span>|</span><span>${ item.title }</span></a>
+                html += `<div class="layui-col-md6"><div class="house"><div class="layui-panel house-item">
+                         <div class="pic"><img layer-src="${item.imgr}" src="${item.imgr}"></div>
+                         <div class="text"><a href="${item.link}" title="${item.title}" target="_blank" class="layui-elip"><strong>${ item.type }</strong><span>|</span><span>${ item.title }</span></a>
                                 <dl>
                                 <dd><strong>房型：</strong><span>${ item.room }</span></dd>
                                 <dd class="money">
@@ -129,18 +131,30 @@
                                 </dd>
                             </dl>
                             <div class="opt">
-                                <button type="button" class="layui-btn layui-btn-xs layui-btn-danger" id="busBtn">公交路线</button>
-                                <button type="button" class="layui-btn layui-btn-xs layui-btn-normal" id="carBtn">驾车路线</button>
+                                <button type="button" class="bus layui-btn layui-btn-xs layui-btn-danger" id="busBtn">公交路线</button>
+                                <button type="button" class="car layui-btn layui-btn-xs layui-btn-normal" id="carBtn">驾车路线</button>
                             </div></div></div></div></div>`;
             });
 
             $("#houseList").html(html);
 
-            $('#busBtn').on('click', function () {
+            // The screen load of image
+            flow.lazyimg({
+                elem: '#houseList .pic img',
+                scrollElem: '#houseList'
+            });
+
+            // Photos Image
+            layer.photos({
+                photos: '.pic',
+                anim: 4
+            });
+
+            $('.bus').on('click', function () {
                 layer.msg('公交路线');
             })
 
-            $('#carBtn').on('click', function () {
+            $('.car').on('click', function () {
                 layer.msg('驾车路线');
             })
         }
