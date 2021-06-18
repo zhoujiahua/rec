@@ -16,4 +16,4 @@ const scheduleCronstyle = (rules) => {
   });
 }
 
-module.exports = (rules = '0 0 * * * *') => scheduleCronstyle(rules)
+module.exports = (rules = '0 0 0 * * *') => scheduleCronstyle(rules)
