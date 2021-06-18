@@ -7,6 +7,6 @@ exports.logHandler = (log) => {
 }
 
 exports.msgHandler = (res, code = 200, msg = {}) => {
-    const newMsg = Object.assign({ success: true, code: 0 }, msg);
+    const newMsg = Object.assign({ code: 0, success: true, msg: 'success' }, msg);
     return res.status(code).json(newMsg);
 }

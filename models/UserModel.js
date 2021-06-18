@@ -1,8 +1,11 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const SvSchema = new Schema({
+const UserSchema = new Schema({
     username: {
+        type: String
+    },
+    email: {
         type: String,
         required: true
     },
@@ -10,18 +13,17 @@ const SvSchema = new Schema({
         type: String,
         required: true
     },
-    multi_depart: Number,
-    userInfo: Object,
-    departs: Array,
-    token: String,
+    avatar: {
+        type: String
+    },
     updateTime: {
         type: Date,
-        default: Date.now().toString(),
+        default: Date.now().toString()
     },
     createDate: {
         type: Date,
-        default: Date.now().toString(),
+        default: Date.now().toString()
     }
 })
 
-exports.SvUser = mongoose.model('svusers', SvSchema, 'svusers');
+exports.User = mongoose.model('users', UserSchema, 'users');
