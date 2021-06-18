@@ -75,37 +75,56 @@
             </div>
             {{/each}} -->
         </div>
+        <div class="pages layui-row">
+            <div id="page"></div>
+        </div>
     </div>
 </div>
 {{/block}}
 
 {{block "script"}}
 <script>
-    layui.use(['layer', 'flow'], function () {
+    layui.use(['layer', 'laypage', 'flow'], function () {
         var layer = layui.layer,
+            laypage = layui.laypage,
             flow = layui.flow,
             $ = layui.jquery;
 
-        var cityInfo = localStorage.cityInfo;
+        var cityInfo = localStorage.cityInfo,
+            params = {
+                wk: '',
+                page: 1,
+                curr: 1,
+                limit: 20,
+                sort: 'desc'
+            };
         if (cityInfo) {
             cityInfo = JSON.parse(cityInfo);
             $("#localCity").text(cityInfo.city);
-            loadList({
-                wk: cityInfo.city,
-                page: 1,
-                limit: 20,
-                sort: 'desc'
-            })
+            params.wk = cityInfo.city;
+            loadList(params);
         }
 
-        function loadList(params) {
+        function loadList(data) {
             $.ajax({
                 type: "GET",
                 url: "/api/spider/splist",
-                data: params,
+                data: data,
                 dataType: "json",
                 success: function (res) {
-                    if (res.success) setListHtml(res.data);
+                    if (!res.success) return false;
+                    setListHtml(res.data);
+                    data.count = res.count;
+                    data.jump = function (obj, first) {
+                        if (first) return false;
+                        loadList({
+                            wk: data.wk,
+                            page: obj.curr,
+                            curr: obj.curr,
+                            limit: obj.limit
+                        })
+                    }
+                    if (res.count || res.count > data.limit) pageList(data);
                 }
             });
         }
@@ -133,9 +152,9 @@
                                     <span>${ item.infor.housing }</span><span>-</span><span>${ item.infor.traffic }</span>
                                 </dd>
                             </dl>
-                            <div class="opt">
-                                <button type="button" class="bus layui-btn layui-btn-xs layui-btn-danger" id="busBtn">公交路线</button>
-                                <button type="button" class="car layui-btn layui-btn-xs layui-btn-normal" id="carBtn">驾车路线</button>
+                            <div class="opt" data-address="${ item.infor.site }">
+                                <button type="button" class="bus layui-btn layui-btn-xs layui-btn-danger" id="busBtn">查看地图</button>
+                                <button type="button" class="look layui-btn layui-btn-xs layui-btn-normal" id="lookBtn">查看详情</button>
                             </div></div></div></div></div>`;
             });
 
@@ -155,23 +174,44 @@
 
             $('.text a').on('click', function (e) {
                 e.preventDefault();
-                layer.open({
-                    title: $(this).attr('title'),
-                    area: ['96%', '92%'],
-                    type: 2,
-                    maxmin: true,
-                    content: $(this).attr('href'),
-                    btn: ['关闭']
-                });
+                openRoomDetail($(this).attr('title'), $(this).attr('href'));
             })
 
             $('.bus').on('click', function () {
-                layer.msg('公交路线');
+                var ads = $(this).parent('.opt');
+                openRoomDetail(cityInfo.city + ads.data('address'), 'https://ditu.amap.com/dir');
             })
 
-            $('.car').on('click', function () {
-                layer.msg('驾车路线');
+            $('.look').on('click', function () {
+                var text = $(this).parents('.house').find('.text a');
+                openRoomDetail(text.attr('title'), text.attr('href'));
             })
+        }
+
+        // Open layer page
+        function openRoomDetail(title, url) {
+            layer.open({
+                title: title,
+                area: ['96%', '92%'],
+                type: 2,
+                maxmin: true,
+                content: url,
+                btn: ['关闭']
+            });
+        }
+
+        // laypage
+        function pageList(pms) {
+            laypage.render({
+                theme: pms.theme || '#1E9FFF',
+                elem: pms.elem || 'page',
+                count: pms.count || 50,
+                limit: pms.limit || 20,
+                curr: pms.curr || 1,
+                jump: pms.jump || function (obj) {
+                    console.log(obj)
+                }
+            });
         }
     })
 </script>

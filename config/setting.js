@@ -49,6 +49,14 @@ exports.czInfo = [
         province: '',
         adcode: '',
         distance: ''
+    },
+    {
+        sort: '7',
+        key: 'xianyang',
+        city: '咸阳',
+        province: '',
+        adcode: '',
+        distance: ''
     }
 ].map(v => {
     v.cid = '2';

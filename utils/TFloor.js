@@ -11,7 +11,7 @@ const initRenInfo = async () => {
             if (!findInfo) new RenInfo(v).save();
             if (len == k) {
                 initSpiderInfo()
-                console.log('The rental information was initialized successfully.'.blue);
+                console.log(`Data collection successful-${Date()}`.blue);
             };
         } catch (error) {
             console.error(err)
