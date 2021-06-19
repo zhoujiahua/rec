@@ -9,17 +9,17 @@ exports.spiderList = async (req, res) => {
         r.wk = r.wk.replace('市', '') || '西安';
         r.title = r.title || '';
         r.sort = r.sort || 'desc';
-        r.like = r.like || false;
+        r.like = r.like || 0;
 
         let count = 0,
             result = [],
             pmr = { city: r.wk },
             spm = { cdate: r.sort };
 
-        if (r.like) {
+        if (r.like == 1) {
             pmr = { title: new RegExp(r.title) };
         }
-        
+
         count = await RenList.find(pmr).count();
         result = await RenList.find(pmr).skip(r.limit * (Number(r.page) ? r.page - 1 : 0)).limit(Number(r.limit)).sort(spm);
         return $msc(res, 200, { count, result });
