@@ -239,7 +239,7 @@
 
             $('.bus').on('click', function () {
                 var ads = $(this).parent('.opt');
-                openRoomDetail(cityInfo.city + ads.data('address'), 'https://ditu.amap.com/dir');
+                openRoomDetail(ads.data('address'), 'https://ditu.amap.com/dir');
             })
 
             $('.look').on('click', function () {
