@@ -10,8 +10,9 @@
     <div class="layui-container">
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
             <legend>
+                <span>欢迎使用-</span>
                 <strong class="local-text" id="localCity"></strong>
-                <span>租房信息</span>
+                <span>-租房信息</span>
             </legend>
         </fieldset>
         <div class="layui-row layui-col-space15" id="houseList">
@@ -84,52 +85,110 @@
 
 {{block "script"}}
 <script>
-    layui.use(['layer', 'laypage', 'flow'], function () {
+    $cm.auth();
+    layui.use(['layer', 'form', 'laypage', 'flow'], function () {
         var layer = layui.layer,
+            form = layui.form,
             laypage = layui.laypage,
             flow = layui.flow,
             $ = layui.jquery;
 
-        var cityInfo = localStorage.cityInfo,
-            params = {
-                wk: '',
-                page: 1,
-                curr: 1,
-                limit: 20,
-                sort: 'desc'
+        var paramsIndex = function (obj) {
+            return {
+                wk: obj.wk || '',
+                title: obj.title || '',
+                page: obj.page || 1,
+                curr: obj.curr || 1,
+                limit: obj.limit || 20,
+                sort: obj.sort || 'desc',
+                like: obj.like || false
             };
-        if (cityInfo) {
-            cityInfo = JSON.parse(cityInfo);
-            $("#localCity").text(cityInfo.city);
-            params.wk = cityInfo.city;
-            loadList(params);
         }
 
-        function loadList(data) {
+        var setInfo = function (city = '西安') {
+            $('#localTxt').text(city);
+            $('#localCity').text(city);
+        }
+
+        // initialize map
+        AMap.plugin(['AMap.CitySearch'], function () {
+            showCityInfo(AMap);
+        });
+
+        // get loal city info
+        function showCityInfo(AM) {
+            //实例化城市查询类
+            var citysearch = new AM.CitySearch();
+            //自动获取用户IP，返回当前城市
+            citysearch.getLocalCity(function (status, result) {
+                if (status === 'complete' && result.info === 'OK') {
+                    if (result && result.city && result.bounds) {
+                        var city = result.city.replace('市', '');
+                        localStorage.setItem('cityInfo', JSON.stringify(result));
+                        loadList(paramsIndex({
+                            wk: city
+                        }))
+                    }
+                } else {
+                    localStorage.removeItem('cityInfo');
+                    loadList(paramsIndex({
+                        wk: '西安'
+                    }))
+                }
+            });
+        }
+
+        function loadList(prms) {
+            setInfo(prms.wk);
+            var loadShred = layer.load(1, {
+                shade: [0.5, '#fff']
+            });
+
             $.ajax({
                 type: "GET",
                 url: "/api/spider/splist",
-                data: data,
+                data: prms,
+                headers: $cm.headers(),
                 dataType: "json",
                 success: function (res) {
                     if (!res.success) return false;
-                    setListHtml(res.data);
-                    data.count = res.count;
-                    data.jump = function (obj, first) {
-                        if (first) return false;
-                        loadList({
-                            wk: data.wk,
-                            page: obj.curr,
-                            curr: obj.curr,
-                            limit: obj.limit
-                        })
+                    setListHtml(res.result);
+                    $('#page').html('');
+                    if (res.count || res.count > prms.limit) {
+                        pageList({
+                            count: res.count,
+                            curr: prms.curr,
+                            limit: prms.limit,
+                            jump: function (obj, first) {
+                                if (first) return false;
+                                loadList({
+                                    wk: prms.wk,
+                                    page: obj.curr,
+                                    curr: obj.curr,
+                                    limit: obj.limit
+                                })
+                            }
+                        });
                     }
-                    if (res.count || res.count > data.limit) pageList(data);
+                },
+                error: function (err) {
+                    if (err.status == 401) {
+                        return $cm.logout();
+                    }
+                },
+                complete: function () {
+                    var timer = setTimeout(function () {
+                        layer.close(loadShred);
+                        clearTimeout(timer);
+                    }, 800)
                 }
             });
         }
 
         function setListHtml(data) {
+            var houseList = $("#houseList");
+            if (!data || !data.length) return houseList.html('<h4>暂无数据...</h4>');
+
             var html = '';
             $.each(data, function (key, item) {
                 html += `<div class="layui-col-md6"><div class="house"><div class="layui-panel house-item">
@@ -139,6 +198,7 @@
                                 <strong>${ item.type }</strong><span>|</span><span>${ item.title }</span>
                             </a>
                             <dl>
+                                <dd><strong>城市：</strong><span class="typec">${ item.city }</span></dd>
                                 <dd><strong>房型：</strong><span>${ item.room }</span></dd>
                                 <dd class="money">
                                     <strong>价格：</strong><span>${ item.money.price }</span><span>/</span><span>${ item.money.units }</span>
@@ -148,7 +208,7 @@
                                     <span>${ item.source.info }</span><span>-</span><span>${ item.source.intro }</span>
                                 </dd>
                                 <dd>
-                                    <strong>地址：</strong><span>${ item.infor.site }</span><span>-</span>
+                                    <strong>地址：</strong><span>${ item.city }</span>-<span>${ item.infor.site }</span><span>-</span>
                                     <span>${ item.infor.housing }</span><span>-</span><span>${ item.infor.traffic }</span>
                                 </dd>
                             </dl>
@@ -158,7 +218,7 @@
                             </div></div></div></div></div>`;
             });
 
-            $("#houseList").html(html);
+            houseList.html(html);
 
             // The screen load of image
             flow.lazyimg({
@@ -188,14 +248,39 @@
             })
         }
 
+        function isEmpty(value) {
+            return value === undefined || value === null ||
+                (typeof value === "object" && Object.keys(value).length === 0) ||
+                (typeof value === "string" && value.trim().length === 0)
+        }
+
+        form.verify({
+            keyWord: function (value) {
+                value = !isEmpty(value) ? value : '';
+                if (!value) return '检索条件不能为空！';
+            }
+        });
+
+        // search key
+        form.on('submit(formBtn)', function (data) {
+            var kw = data.field;
+            loadList(paramsIndex({
+                wk: cityInfo.city.replace('市', ''),
+                title: kw.keyWord,
+                like: true
+            }))
+            return false;
+        });
+
         // Open layer page
         function openRoomDetail(title, url) {
             layer.open({
+                type: 2,
                 title: title,
                 area: ['96%', '92%'],
-                type: 2,
                 maxmin: true,
                 content: url,
+                scrollbar: false,
                 btn: ['关闭']
             });
         }
@@ -213,6 +298,31 @@
                 }
             });
         }
+
+        // change city
+        $('#changeCity').on('click', function () {
+            layer.open({
+                type: 1,
+                title: '选择城市',
+                area: ['70%', '60%'],
+                closeBtn: 1, //不显示关闭按钮
+                anim: 2,
+                shadeClose: true, //开启遮罩关闭
+                scrollbar: false,
+                content: $('.city-tab').prop('outerHTML'),
+                success: function (layero, index) {
+                    $('#cityul li').on('click', function () {
+                        var citys = $(this).data('city');
+                        loadList(paramsIndex({
+                            wk: citys.city
+                        }));
+                        layer.close(index);
+                    })
+                }
+
+            });
+        })
+
     })
 </script>
 {{/block}}

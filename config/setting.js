@@ -5,7 +5,7 @@ exports.czInfo = [
     {
         sort: '0',
         key: 'bj',
-        city: '上海',
+        city: '北京',
         province: '',
         adcode: '',
         distance: ''

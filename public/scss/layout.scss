@@ -45,6 +45,27 @@ body {
             strong {
                 color: #FF5722;
             }
+
+            a {
+                color: #fff;
+
+                &:hover {
+                    color: #1E9FFF;
+                }
+            }
+        }
+
+        .log-info {
+            display: inline-block;
+            vertical-align: middle;
+
+            a {
+                color: #1E9FFF;
+
+                &:hover {
+                    color: #FF5722;
+                }
+            }
         }
 
         .serach {
@@ -71,8 +92,37 @@ body {
     .text {
         text-align: center;
         font-size: 12px;
+
         span {
             margin-right: 10px;
         }
+    }
+}
+
+.city-tab {
+    padding: 15px;
+
+    ul {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        li {
+            margin: 6px;
+            cursor: pointer;
+
+            &:hover {
+                color: #FF5722
+            }
+
+            &:active {
+                color: #FF5722;
+            }
+        }
+
+        .active {
+            color: #FF5722;
+        }
+
     }
 }

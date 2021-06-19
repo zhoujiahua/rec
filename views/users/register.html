@@ -7,11 +7,11 @@
 
 {{block "wrapper"}}
 <div class="users">
-    <div class="login content">
+    <div class="register content">
         <div class="layui-card">
-            <div class="layui-card-header"><strong>用户登录</strong></div>
+            <div class="layui-card-header"><strong>用户注册</strong></div>
             <div class="layui-card-body">
-                <form class="layui-form" lay-filter="loginText">
+                <form class="layui-form" lay-filter="registerText">
                     <div class="layui-form-item">
                         <input type="text" name="email" lay-verify="email" placeholder="请输入邮箱账号" autocomplete="off"
                             class="layui-input">
@@ -21,14 +21,18 @@
                             autocomplete="off" class="layui-input">
                     </div>
                     <div class="layui-form-item">
-                        <button class="layui-btn layui-btn-fluid layui-btn-normal" lay-submit
-                            lay-filter="loginInfo">立即登录</button>
+                        <input type="password" name="password2" lay-verify="password2" placeholder="确认用户密码"
+                            autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-form-item">
+                        <button class="layui-btn layui-btn-fluid layui-btn-danger" lay-submit
+                            lay-filter="registerInfo">立即注册</button>
                     </div>
                     <div class="layui-form-item">
                         <button type="reset" class="layui-btn layui-btn-fluid layui-btn-primary">重置信息</button>
                     </div>
                     <div class="text-info layui-form-item">
-                        <a href="/users/register">没有账号，去注册</a>
+                        <a href="/users/login">已有账号，去登录</a>
                     </div>
                 </form>
             </div>
@@ -65,23 +69,28 @@
             password: function (value) {
                 value = !isEmpty(value) ? value : '';
                 if (!value) return '用户密码不能为空！';
+                this.pass = value;
+            },
+            password2: function (value) {
+                if (value !== this.pass) return '两次密码不一致，请重新输入！';
             }
         });
 
-        form.val('loginText', {
-            email: 'jiahuasir@163.com',
-            password: '123123'
+        form.val('registerText', {
+            email: 'jiahuasir@126.com',
+            password: '123123',
+            password2: '123123'
         })
 
         // login infomation
-        form.on('submit(loginInfo)', function (data) {
+        form.on('submit(registerInfo)', function (data) {
             var params = data.field;
             var loadShred = layer.load(1, {
                 shade: [0.5, '#fff']
             });
             $.ajax({
                 type: "POST",
-                url: "/api/users/login",
+                url: "/api/users/register",
                 data: params,
                 dataType: "json",
                 success: function (res) {
@@ -92,7 +101,7 @@
                             icon: 1,
                             time: 800
                         }, function () {
-                            location.href = '/'
+                            location.href = '/users/login'
                         })
                     }
                     return layer.msg(res.msg, {

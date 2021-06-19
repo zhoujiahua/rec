@@ -1,4 +1,4 @@
-const { SECRET_KEY } = $re('/config/secure.js');
+const { SECRET_KEY, EXP_IN } = $re('/config/secure.js');
 const { User } = $re('/models/UserModel.js');
 const Validator = require("validator");
 const gravatar = require("gravatar");
@@ -22,7 +22,7 @@ exports.userLogin = async (req, res) => {
 
         // 创建Token
         const rules = { id: findUser.id, email: findUser.email, avatar: findUser.avatar, createDate: findUser.createDate };
-        const expiresIn = 3600;
+        const expiresIn = EXP_IN;
         const accessToken = await jwt.sign(rules, SECRET_KEY, { expiresIn });
         const result = { accessToken, expiresIn, tokenType: 'Bearer' };
         return $msc(res, 200, { msg: '用户登录成功！', result });
@@ -52,6 +52,17 @@ exports.userRegister = async (req, res) => {
         const result = await newUser.save();
         result.password = '';
         return $msc(res, 200, { msg: '用户注册成功！', result });
+    } catch (error) {
+        return $err(req, error);
+    }
+}
+
+exports.userProfile = async (req, res) => {
+    try {
+        const user = req.user;
+        const result = await User.findById(user.id);
+        result.password = '';
+        return $msc(res, 200, { result });
     } catch (error) {
         return $err(req, error);
     }
