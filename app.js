@@ -33,4 +33,5 @@ const port = process.env.PORT || 9000;
 app.listen(port, async () => {
     await require('./utils/DBConnect')();
     console.log('Start server on:http://localhost:' + port);
+    require('./utils/Schedule')();
 })
